@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>استمارة تحقيق ميداني - التسممات الغذائية الجماعية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16302b;
+    --ink-soft:#3f5b54;
+    --paper:#f6f4ee;
+    --card:#ffffff;
+    --line:#dfe0d6;
+    --teal:#1f5c50;
+    --teal-dark:#123f37;
+    --amber:#c07a2c;
+    --red:#a6392f;
+    --red-soft:#fbeae8;
+    --green-soft:#e9f3ee;
+    --radius:10px;
+    --shadow:0 1px 2px rgba(22,48,43,.06), 0 6px 18px rgba(22,48,43,.05);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Tajawal','Cairo',system-ui,sans-serif;
+    line-height:1.7;
+    padding:28px 16px 80px;
+  }
+  .wrap{max-width:880px;margin:0 auto;}
+
+  header.top{
+    background:linear-gradient(135deg,var(--teal-dark),var(--teal));
+    color:#fff;
+    border-radius:14px;
+    padding:28px 26px;
+    margin-bottom:22px;
+    box-shadow:var(--shadow);
+    position:relative;
+    overflow:hidden;
+  }
+  header.top::after{
+    content:"";
+    position:absolute; inset:0;
+    background:radial-gradient(circle at 88% -10%, rgba(255,255,255,.14), transparent 55%);
+    pointer-events:none;
+  }
+  header.top .eyebrow{
+    font-size:13px; color:#cfe3dd; margin:0 0 6px; font-weight:500;
+  }
+  header.top h1{
+    margin:0 0 8px; font-family:'Cairo',sans-serif; font-weight:800; font-size:23px; letter-spacing:.2px;
+  }
+  header.top p{margin:0; color:#dcece7; font-size:14.5px; max-width:60ch;}
+
+  .config-banner{
+    background:#fff4e0; border:1px solid #e7c27f; color:#6b4c14;
+    border-radius:10px; padding:14px 16px; margin-bottom:20px; font-size:14px;
+    display:none;
+  }
+  .config-banner.show{display:block;}
+
+  section.card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    margin-bottom:18px;
+    overflow:hidden;
+  }
+  section.card > .card-head{
+    display:flex; align-items:center; gap:12px;
+    padding:16px 20px;
+    border-bottom:1px solid var(--line);
+    background:#fbfaf6;
+  }
+  section.card > .card-head .num{
+    flex:0 0 auto;
+    width:30px;height:30px;
+    background:var(--teal);
+    color:#fff;
+    border-radius:8px;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700; font-size:14px; font-family:'Cairo',sans-serif;
+  }
+  section.card > .card-head h2{
+    margin:0; font-size:16.5px; font-weight:700; font-family:'Cairo',sans-serif; color:var(--ink);
+  }
+  section.card > .card-body{padding:20px;}
+
+  .field{margin-bottom:16px;}
+  .field:last-child{margin-bottom:0;}
+  .field label{
+    display:block; font-size:14px; font-weight:600; color:var(--ink); margin-bottom:6px;
+  }
+  .field .hint{font-size:12.5px; color:var(--ink-soft); font-weight:400; margin-top:4px;}
+  .req{color:var(--red); margin-inline-start:3px;}
+
+  input[type=text], input[type=number], input[type=date], input[type=time], textarea, select{
+    width:100%;
+    font-family:inherit;
+    font-size:14.5px;
+    padding:10px 12px;
+    border:1px solid #cfd3c8;
+    border-radius:8px;
+    background:#fff;
+    color:var(--ink);
+    transition:border-color .15s, box-shadow .15s;
+  }
+  input:focus, textarea:focus, select:focus{
+    outline:none; border-color:var(--teal); box-shadow:0 0 0 3px rgba(31,92,80,.14);
+  }
+  textarea{resize:vertical; min-height:64px;}
+
+  .row2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .row3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px;}
+  @media(max-width:620px){ .row2,.row3{grid-template-columns:1fr;} }
+
+  .choice-group{display:flex; flex-wrap:wrap; gap:10px;}
+  .choice{
+    border:1px solid #cfd3c8; border-radius:8px; padding:9px 14px;
+    font-size:14px; cursor:pointer; background:#fff; user-select:none;
+    display:flex; align-items:center; gap:8px;
+  }
+  .choice input{width:15px; height:15px; margin:0; accent-color:var(--teal);}
+  .choice.active{border-color:var(--teal); background:var(--green-soft); font-weight:600;}
+
+  .subblock{
+    margin-top:12px; padding:14px; border-radius:8px;
+    background:#f6f8f5; border:1px dashed #c8cfc2; display:none;
+  }
+  .subblock.show{display:block;}
+
+  .violations-list{display:flex; flex-direction:column; gap:8px;}
+  .violation-row{display:flex; gap:8px;}
+  .violation-row input{flex:1;}
+  .icon-btn{
+    flex:0 0 auto; width:38px; height:38px; border-radius:8px; border:1px solid #cfd3c8;
+    background:#fff; cursor:pointer; font-size:16px; color:var(--ink-soft);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .icon-btn:hover{background:#f1efe8;}
+  .add-link{
+    margin-top:10px; background:none; border:none; color:var(--teal); font-weight:700;
+    font-size:14px; cursor:pointer; padding:0; font-family:inherit;
+  }
+
+  .closure-days-wrap{margin-top:12px; display:none;}
+  .closure-days-wrap.show{display:block;}
+
+  footer.submit-bar{
+    position:sticky; bottom:14px;
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    box-shadow:0 8px 24px rgba(22,48,43,.14);
+    padding:14px 18px; display:flex; align-items:center; justify-content:space-between; gap:14px;
+    margin-top:22px;
+  }
+  footer.submit-bar .status{font-size:13px; color:var(--ink-soft);}
+  button.submit-btn{
+    background:var(--teal); color:#fff; border:none; border-radius:9px;
+    padding:12px 26px; font-size:15px; font-weight:700; cursor:pointer;
+    font-family:'Cairo',sans-serif;
+    transition:background .15s;
+  }
+  button.submit-btn:hover{background:var(--teal-dark);}
+  button.submit-btn:disabled{background:#9db3ad; cursor:not-allowed;}
+
+  .result-banner{
+    display:none; border-radius:10px; padding:16px 18px; margin-top:16px; font-size:14.5px;
+  }
+  .result-banner.ok{display:block; background:var(--green-soft); border:1px solid #a9cdbd; color:#153b2f;}
+  .result-banner.err{display:block; background:var(--red-soft); border:1px solid #e3b3ad; color:#6b201a;}
+
+  .field.invalid input, .field.invalid select, .field.invalid textarea{border-color:var(--red);}
+  .field .err-msg{display:none; color:var(--red); font-size:12.5px; margin-top:4px;}
+  .field.invalid .err-msg{display:block;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <p class="eyebrow">مصالح مراقبة الجودة وقمع الغش — المفتشيات الإقليمية</p>
+    <h1>استمارة تحقيق ميداني في حالات التسمم الغذائي الجماعي</h1>
+    <p>يملأ العون المعاين هذه الاستمارة مباشرة بعد التحقق الميداني. عند الإرسال، تُسجَّل البيانات آليًا ويُعلَم المشرف فورًا.</p>
+  </header>
+
+  <div id="configBanner" class="config-banner">
+    ⚠️ لم يتم بعد ربط الاستمارة بجدول البيانات (Google Sheet). افتح ملف <strong>Code.gs</strong> المرفق واتبع خطوات النشر، ثم ضع الرابط الناتج في السطر الأول من ملف الجافاسكربت داخل هذه الصفحة (<code>ENDPOINT_URL</code>).
+  </div>
+
+  <form id="tiacForm" novalidate>
+
+    <section class="card">
+      <div class="card-head"><span class="num">١</span><h2>المفتشية والعون المعاين</h2></div>
+      <div class="card-body">
+        <div class="field">
+          <label>المفتشية الإقليمية <span class="req">*</span></label>
+          <select id="inspectorate" required>
+            <option value="">اختر المفتشية...</option>
+            <option>توقرت</option>
+            <option>الطيبات</option>
+            <option>تماسين</option>
+            <option value="أخرى">أخرى</option>
+          </select>
+          <div class="err-msg">هذا الحقل إجباري</div>
+        </div>
+        <div class="field" id="inspectorateOtherWrap" style="display:none;">
+          <label>تحديد المفتشية</label>
+          <input type="text" id="inspectorateOther" placeholder="اكتب اسم المفتشية">
+        </div>
+
+        <div class="field">
+          <label>اسم العون أو الأعوان المعاينين <span class="req">*</span></label>
+          <input type="text" id="agents" required placeholder="مثال: بن علي محمد — لعور خالد">
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label>البلدية <span class="req">*</span></label>
+            <input type="text" id="municipality" required>
+            <div class="err-msg">هذا الحقل إجباري</div>
+          </div>
+          <div class="field">
+            <label>العنوان الكامل لحالة التسمم <span class="req">*</span></label>
+            <input type="text" id="address" required>
+            <div class="err-msg">هذا الحقل إجباري</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><span class="num">٢</span><h2>معلومات عن حالة التسمم</h2></div>
+      <div class="card-body">
+        <div class="row2">
+          <div class="field">
+            <label>تاريخ الإعلام بالتسمم <span class="req">*</span></label>
+            <input type="date" id="reportDate" required>
+            <div class="err-msg">هذا الحقل إجباري</div>
+          </div>
+          <div class="field">
+            <label>ساعة الإعلام بالتسمم <span class="req">*</span></label>
+            <input type="time" id="reportTime" required>
+            <div class="err-msg">هذا الحقل إجباري</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>مصدر الحالة <span class="req">*</span></label>
+          <div class="choice-group" id="sourceTypeGroup">
+            <label class="choice"><input type="radio" name="sourceType" value="ضمن النسيج التجاري"> ضمن النسيج التجاري</label>
+            <label class="choice"><input type="radio" name="sourceType" value="خارج النسيج التجاري"> خارج النسيج التجاري</label>
+          </div>
+        </div>
+
+        <div class="subblock" id="tradeSubblock">
+          <div class="field">
+            <label>نوع الفاعل</label>
+            <div class="choice-group" id="actorTypeGroup">
+              <label class="choice"><input type="radio" name="actorType" value="تاجر"> تاجر</label>
+              <label class="choice"><input type="radio" name="actorType" value="حرفي"> حرفي</label>
+            </div>
+          </div>
+          <div class="field" id="tradeRegWrap" style="display:none;">
+            <label>رقم السجل التجاري</label>
+            <input type="text" id="tradeRegNo" placeholder="مثال: 00أ000000-00/55">
+          </div>
+          <div class="field" id="craftCardWrap" style="display:none;">
+            <label>رقم بطاقة الحرفي</label>
+            <input type="text" id="craftCardNo" placeholder="مثال: 00000000">
+          </div>
+        </div>
+
+        <div class="row3" style="margin-top:16px;">
+          <div class="field">
+            <label>عدد الأشخاص المصابين <span class="req">*</span></label>
+            <input type="number" min="0" id="casesCount" required>
+            <div class="err-msg">هذا الحقل إجباري</div>
+          </div>
+          <div class="field">
+            <label>عدد المغادرين للمستشفى</label>
+            <input type="number" min="0" id="hospitalLeaveCount">
+          </div>
+          <div class="field">
+            <label>عدد من بقوا تحت المراقبة</label>
+            <input type="number" min="0" id="medicalWatchCount">
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>عدد الحالات المتوفية</label>
+            <input type="number" min="0" id="deathsCount">
+          </div>
+          <div class="field">
+            <label>الفئة العمرية للحالات (بالسنوات)</label>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <input type="number" min="0" id="ageMin" placeholder="من">
+              <span style="color:var(--ink-soft);">إلى</span>
+              <input type="number" min="0" id="ageMax" placeholder="إلى">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><span class="num">٣</span><h2>معلومات خاصة بمصدر التسمم</h2></div>
+      <div class="card-body">
+        <div class="field">
+          <label>مصدر التسمم <span class="req">*</span></label>
+          <select id="poisoningSource" required>
+            <option value="">اختر...</option>
+            <option>إطعام جماعي (مناسبة عائلية)</option>
+            <option>إطعام جماعي تجاري</option>
+            <option>تجاري اقتناء منتوج</option>
+            <option>مطاعم التكوين المهني</option>
+            <option>مطاعم الشركات وقواعد الحياة</option>
+            <option>مطاعم جماعية</option>
+            <option>مطاعم مدرسية</option>
+            <option value="أخرى">أخرى</option>
+          </select>
+          <div class="err-msg">هذا الحقل إجباري</div>
+        </div>
+        <div class="field" id="poisoningSourceOtherWrap" style="display:none;">
+          <label>تحديد مصدر التسمم</label>
+          <input type="text" id="poisoningSourceOther">
+        </div>
+
+        <div class="field">
+          <label>المنتوج المشتبه به <span class="req">*</span> <span class="hint">(يمكن اختيار أكثر من نوع)</span></label>
+          <div class="choice-group" id="suspectedProductsGroup">
+            <label class="choice"><input type="checkbox" value="أكل منزلي"> أكل منزلي</label>
+            <label class="choice"><input type="checkbox" value="البيض"> البيض</label>
+            <label class="choice"><input type="checkbox" value="اللحوم الحمراء"> اللحوم الحمراء</label>
+            <label class="choice"><input type="checkbox" value="المثلجات"> المثلجات</label>
+            <label class="choice"><input type="checkbox" value="المرقاز"> المرقاز</label>
+            <label class="choice"><input type="checkbox" value="الدجاج"> الدجاج</label>
+            <label class="choice"><input type="checkbox" value="أخرى"> أخرى</label>
+          </div>
+          <div class="err-msg" id="productsErr">اختر منتوجًا واحدًا على الأقل</div>
+        </div>
+        <div class="field" id="suspectedProductsOtherWrap" style="display:none;">
+          <label>تحديد المنتوج</label>
+          <input type="text" id="suspectedProductsOther">
+        </div>
+
+        <div class="field">
+          <label>معلومات أخرى عن المنتوج المشتبه فيه</label>
+          <textarea id="otherInfo" placeholder="مثال: وصف الممارسة غير الصحية المرتكبة أثناء التعامل مع المادة الغذائية..."></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head"><span class="num">٤</span><h2>الإجراءات المتخذة من طرف مصالحنا</h2></div>
+      <div class="card-body">
+        <div class="field">
+          <label>المخالفات المرفوعة</label>
+          <div class="violations-list" id="violationsList">
+            <div class="violation-row">
+              <input type="text" placeholder="مخالفة رقم 1">
+              <button type="button" class="icon-btn" onclick="removeViolation(this)" title="حذف">✕</button>
+            </div>
+          </div>
+          <button type="button" class="add-link" onclick="addViolation()">+ إضافة مخالفة أخرى</button>
+        </div>
+
+        <div class="field">
+          <label>العامل (البكتيريا) الممرض المسبب</label>
+          <input type="text" id="pathogen" placeholder="يُملأ عند صدور كشف التحاليل">
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label>عدد العينات المقتطعة</label>
+            <input type="number" min="0" id="samplesTaken">
+          </div>
+          <div class="field">
+            <label>عدد العينات المطابقة</label>
+            <input type="number" min="0" id="samplesConforming">
+          </div>
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <label>عدد المحاضر المحررة ضد المخالف</label>
+            <input type="number" min="0" id="reportsCount">
+          </div>
+          <div class="field">
+            <label>قيمة المحجوزات (دج)</label>
+            <input type="number" min="0" id="seizureValue">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>كمية المحجوزات</label>
+          <div style="display:flex; gap:10px;">
+            <input type="number" min="0" id="seizureQty" placeholder="الكمية" style="flex:2;">
+            <select id="seizureUnit" style="flex:1;">
+              <option value="كغ">كغ</option>
+              <option value="لتر">لتر</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>الإجراءات المتخذة</label>
+          <select id="actionTaken">
+            <option value="">لا يوجد إجراء خاص</option>
+            <option>اقتراح الغلق</option>
+            <option>توقيف مؤقت للنشاط</option>
+          </select>
+        </div>
+        <div class="field closure-days-wrap" id="closureDaysWrap">
+          <label>مدة الغلق (بالأيام)</label>
+          <input type="number" min="0" id="closureDays">
+        </div>
+      </div>
+    </section>
+
+    <div id="resultBanner" class="result-banner"></div>
+
+    <footer class="submit-bar">
+      <span class="status" id="statusText">جميع الحقول المعلَّمة بـ * إجبارية</span>
+      <button type="submit" class="submit-btn" id="submitBtn">إرسال التحقيق</button>
+    </footer>
+  </form>
+</div>
+
+<script>
+/* ===== ضع هنا رابط تطبيق الويب (Apps Script) بعد نشره ===== */
+const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbz8Z70_jkTlJUKanc38K9KJBc54Az7NdHuo0wJ9vDzyARtCPw7j_izFBVf_QR5YBZM/exec";
+/* =========================================================== */
+
+if (!ENDPOINT_URL || ENDPOINT_URL.indexOf("PASTE_") === 0) {
+  document.getElementById('configBanner').classList.add('show');
+}
+
+// ---- conditional logic ----
+const insp = document.getElementById('inspectorate');
+const inspOtherWrap = document.getElementById('inspectorateOtherWrap');
+insp.addEventListener('change', () => {
+  inspOtherWrap.style.display = insp.value === 'أخرى' ? 'block' : 'none';
+});
+
+document.querySelectorAll('#sourceTypeGroup input').forEach(r => {
+  r.addEventListener('change', () => {
+    document.querySelectorAll('#sourceTypeGroup .choice').forEach(c => c.classList.remove('active'));
+    r.closest('.choice').classList.add('active');
+    const tradeBlock = document.getElementById('tradeSubblock');
+    if (r.value === 'ضمن النسيج التجاري') {
+      tradeBlock.classList.add('show');
+    } else {
+      tradeBlock.classList.remove('show');
+      document.getElementById('tradeRegWrap').style.display = 'none';
+      document.getElementById('craftCardWrap').style.display = 'none';
+    }
+  });
+});
+
+document.querySelectorAll('#actorTypeGroup input').forEach(r => {
+  r.addEventListener('change', () => {
+    document.querySelectorAll('#actorTypeGroup .choice').forEach(c => c.classList.remove('active'));
+    r.closest('.choice').classList.add('active');
+    document.getElementById('tradeRegWrap').style.display = r.value === 'تاجر' ? 'block' : 'none';
+    document.getElementById('craftCardWrap').style.display = r.value === 'حرفي' ? 'block' : 'none';
+  });
+});
+
+const psrc = document.getElementById('poisoningSource');
+const psrcOtherWrap = document.getElementById('poisoningSourceOtherWrap');
+psrc.addEventListener('change', () => {
+  psrcOtherWrap.style.display = psrc.value === 'أخرى' ? 'block' : 'none';
+});
+
+document.querySelectorAll('#suspectedProductsGroup input').forEach(cb => {
+  cb.addEventListener('change', () => {
+    cb.closest('.choice').classList.toggle('active', cb.checked);
+    const otherChecked = document.querySelector('#suspectedProductsGroup input[value="أخرى"]').checked;
+    document.getElementById('suspectedProductsOtherWrap').style.display = otherChecked ? 'block' : 'none';
+  });
+});
+
+const actionTaken = document.getElementById('actionTaken');
+const closureWrap = document.getElementById('closureDaysWrap');
+actionTaken.addEventListener('change', () => {
+  const needsClosure = actionTaken.value === 'اقتراح الغلق' || actionTaken.value === 'توقيف مؤقت للنشاط';
+  closureWrap.classList.toggle('show', needsClosure);
+});
+
+// ---- violations dynamic list ----
+function addViolation() {
+  const list = document.getElementById('violationsList');
+  const row = document.createElement('div');
+  row.className = 'violation-row';
+  row.innerHTML = `<input type="text" placeholder="مخالفة رقم ${list.children.length + 1}">
+    <button type="button" class="icon-btn" onclick="removeViolation(this)" title="حذف">✕</button>`;
+  list.appendChild(row);
+}
+function removeViolation(btn) {
+  const list = document.getElementById('violationsList');
+  if (list.children.length > 1) btn.closest('.violation-row').remove();
+}
+
+// ---- validation ----
+function setInvalid(el, invalid) {
+  const field = el.closest('.field');
+  if (field) field.classList.toggle('invalid', invalid);
+}
+
+function validate() {
+  let ok = true;
+  document.querySelectorAll('#tiacForm [required]').forEach(el => {
+    const bad = !el.value;
+    setInvalid(el, bad);
+    if (bad) ok = false;
+  });
+  const productsChecked = document.querySelectorAll('#suspectedProductsGroup input:checked').length > 0;
+  document.getElementById('suspectedProductsGroup').closest('.field').classList.toggle('invalid', !productsChecked);
+  if (!productsChecked) ok = false;
+  return ok;
+}
+
+// ---- collect + submit ----
+function collectData() {
+  const val = id => document.getElementById(id).value;
+  const radioVal = name => {
+    const r = document.querySelector(`input[name="${name}"]:checked`);
+    return r ? r.value : '';
+  };
+  const violations = Array.from(document.querySelectorAll('#violationsList input'))
+    .map(i => i.value.trim()).filter(Boolean);
+  const products = Array.from(document.querySelectorAll('#suspectedProductsGroup input:checked'))
+    .map(i => i.value);
+
+  return {
+    submittedAt: new Date().toISOString(),
+    inspectorate: val('inspectorate'),
+    inspectorateOther: val('inspectorateOther'),
+    agents: val('agents'),
+    municipality: val('municipality'),
+    address: val('address'),
+    reportDate: val('reportDate'),
+    reportTime: val('reportTime'),
+    sourceType: radioVal('sourceType'),
+    actorType: radioVal('actorType'),
+    tradeRegNo: val('tradeRegNo'),
+    craftCardNo: val('craftCardNo'),
+    casesCount: val('casesCount'),
+    hospitalLeaveCount: val('hospitalLeaveCount'),
+    medicalWatchCount: val('medicalWatchCount'),
+    deathsCount: val('deathsCount'),
+    ageMin: val('ageMin'),
+    ageMax: val('ageMax'),
+    poisoningSource: val('poisoningSource'),
+    poisoningSourceOther: val('poisoningSourceOther'),
+    suspectedProducts: products.join('، '),
+    suspectedProductsOther: val('suspectedProductsOther'),
+    otherInfo: val('otherInfo'),
+    violations: violations.join(' | '),
+    pathogen: val('pathogen'),
+    samplesTaken: val('samplesTaken'),
+    samplesConforming: val('samplesConforming'),
+    reportsCount: val('reportsCount'),
+    seizureQty: val('seizureQty'),
+    seizureUnit: val('seizureUnit'),
+    seizureValue: val('seizureValue'),
+    actionTaken: val('actionTaken'),
+    closureDays: val('closureDays')
+  };
+}
+
+document.getElementById('tiacForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const banner = document.getElementById('resultBanner');
+  banner.className = 'result-banner';
+  banner.textContent = '';
+
+  if (!validate()) {
+    banner.classList.add('err');
+    banner.textContent = 'يرجى تعبئة جميع الحقول الإجبارية المعلَّمة باللون الأحمر.';
+    banner.scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+  if (!ENDPOINT_URL || ENDPOINT_URL.indexOf('PASTE_') === 0) {
+    banner.classList.add('err');
+    banner.textContent = 'لم يتم بعد ربط الاستمارة بجدول البيانات. راجع تعليمات النشر أولاً.';
+    return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'جارٍ الإرسال...';
+
+  try {
+    const res = await fetch(ENDPOINT_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'text/plain;charset=utf-8'},
+      body: JSON.stringify(collectData())
+    });
+    let payload = null;
+    try { payload = await res.json(); } catch(_) {}
+
+    banner.classList.add('ok');
+    banner.textContent = payload && payload.id
+      ? `تم إرسال التحقيق بنجاح. رقم الحالة: ${payload.id} — تم إعلام المشرف.`
+      : 'تم إرسال التحقيق بنجاح. تم إعلام المشرف.';
+    document.getElementById('tiacForm').reset();
+    document.querySelectorAll('.choice.active').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.subblock.show, .closure-days-wrap.show').forEach(c => c.classList.remove('show'));
+    banner.scrollIntoView({behavior:'smooth', block:'center'});
+  } catch (err) {
+    banner.classList.add('err');
+    banner.textContent = 'تعذّر الإرسال. تحقق من الاتصال بالإنترنت وحاول مجددًا. (' + err.message + ')';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'إرسال التحقيق';
+  }
+});
+</script>
+</body>
+</html>
